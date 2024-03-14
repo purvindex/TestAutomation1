@@ -49,8 +49,9 @@ pipeline {
 
           # Install required libraries
           python -m ensurepip --upgrade
-          pip install pytest-cov
+          pip install pipreqs pip-tools
 
+          pipreqs --savepath=requirements.in && pip-compile
           # run unit tests using pytest
           #mkdir -p reports/junit
           #mkdir -p reports/coverage
