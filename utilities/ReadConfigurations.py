@@ -4,7 +4,8 @@ from configparser import ConfigParser
 def read_configuration(category,key):
     config = ConfigParser()
     #config.read(r"C:\Users\PurviDholakia\PycharmProjects\CROWD_TestAutomationFramework\Configurations\config.ini")
-    print(os.getcwd())
+    raise ValueError(f"Current path: {os.getcwd()}")
+
     try:
 	    file = open("../Configurations/config.ini")
 	    print(f"Got the config file successfully: {file}")
