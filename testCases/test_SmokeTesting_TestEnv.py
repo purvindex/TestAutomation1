@@ -31,7 +31,7 @@ class Test_verifyHomePage(softest.TestCase):
 #Click on CROWD
         #self.driver.find_element(By.XPATH, "//div[@class='ng-star-inserted']").click()
         time.sleep(10)
-        self.driver.get_screenshot_as_file("..\Screenshots\Main_Page.png")
+        self.driver.get_screenshot_as_file("../Screenshots/Main_Page.png")
         click_on_CROWD = self.driver.find_element(By.XPATH,
                                                                "//div[@class='ng-star-inserted']")
         self.driver.execute_script("arguments[0].click();", click_on_CROWD)
@@ -44,7 +44,7 @@ class Test_verifyHomePage(softest.TestCase):
         element_App.click()
 # using now() to get current time
         #current_time = datetime.datetime.now()
-        workbook = openpyxl.load_workbook("..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
+        workbook = openpyxl.load_workbook("../ExcelFiles/Automated_SmokeTest_Result.xlsx")
         sheet = workbook['Sheet1']
         combined = datetime.datetime.now()
         formatted_combined = combined.strftime("%d/%m/%Y %I:%M:%p")
@@ -91,7 +91,7 @@ class Test_verifyHomePage(softest.TestCase):
         print(image.is_displayed())
         sheet.cell(row=10, column=3).value = image.is_displayed()
         sheet.cell(row=10, column=4).value = "Pass"
-        workbook.save("..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
+        workbook.save("../ExcelFiles/Automated_SmokeTest_Result.xlsx")
         print(Fore.GREEN + 'CROWD Logo: -' , end='')
         print(Style.RESET_ALL)
         print("     'CROWD' Logo is displayed.")
@@ -150,7 +150,7 @@ class Test_verifyHomePage(softest.TestCase):
              # self.log.info("Assertion Faileded")
             print("CROWD Summary does not match")
             sheet.cell(row=16, column=4).value = "Fail"
-        self.driver.get_screenshot_as_file("..\Screenshots\CROWD Page.png")
+        self.driver.get_screenshot_as_file("../Screenshots/CROWD Page.png")
 ############################## Verifying File Submission (File Upload & File Status) ######################################
         print(Fore.BLUE + "\n******************** Verifying File Submission - File Upload/ File Status Page ********************")
         print(Style.RESET_ALL)
@@ -167,7 +167,7 @@ class Test_verifyHomePage(softest.TestCase):
         click_on_uploadLink = self.driver.find_element(By.XPATH,
                                                        "//span[normalize-space()='File Upload']")
         self.driver.execute_script("arguments[0].click();",click_on_uploadLink)
-        self.driver.get_screenshot_as_file("..\Screenshots\FileUpload.png")
+        self.driver.get_screenshot_as_file("../Screenshots/FileUpload.png")
         click_on_iconButton = self.driver.find_element(By.XPATH,
                                                        "//mat-icon[@type='button']")
         self.driver.execute_script("arguments[0].click();", click_on_iconButton)
@@ -217,7 +217,7 @@ class Test_verifyHomePage(softest.TestCase):
         time.sleep(15)
         try:
             file = self.driver.find_element(By.XPATH, "//input[@type='file']")
-            os.path.abspath("r..\File_Tobe_Upload\CONTRACTOR_MAPPING_VALIDATION_BAD_BSI_FORM_S.txt")
+            os.path.abspath("r../File_Tobe_Upload/CONTRACTOR_MAPPING_VALIDATION_BAD_BSI_FORM_S.txt")
             file.send_keys(os.path.abspath(r"..\File_Tobe_Upload\CONTRACTOR_MAPPING_VALIDATION_BAD_BSI_FORM_S.txt"))
         except Exception as e:
             print(e)
@@ -385,7 +385,7 @@ class Test_verifyHomePage(softest.TestCase):
                 break
             else:
                 sheet.cell(row=36, column=4).value = "Fail"
-        workbook.save("..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
+        workbook.save("../ExcelFiles/Automated_SmokeTest_Result.xlsx")
         self.driver.switch_to.window(parent_window_id)
 # ############################## Verifying Form Page #####################################
         print(Fore.BLUE + "\n************************* Verifying Form Page *************************")
@@ -396,7 +396,7 @@ class Test_verifyHomePage(softest.TestCase):
         forms_Link = self.driver.find_element(By.XPATH, "//span[@class='list-item-label'][normalize-space()='Forms']")
         self.driver.execute_script("arguments[0].click();", forms_Link)
         time.sleep(8)
-        self.driver.get_screenshot_as_file("..\Screenshots\Forms.png")
+        self.driver.get_screenshot_as_file("../Screenshots/Forms.png")
         # Need to be change 2/2/24
         # form= self.driver.find_element(By.XPATH, "//table[@title='Forms Table']/tbody/tr[1]/td[1]").text
         # formType = self.driver.find_element(By.XPATH, "//table[@title='Forms Table']/tbody[1]/tr/td[2]").text
@@ -463,7 +463,7 @@ class Test_verifyHomePage(softest.TestCase):
                                                  "//span[normalize-space()='Reports']")
         self.driver.execute_script("arguments[0].click();", reports_Link)
         time.sleep(5)
-        self.driver.get_screenshot_as_file("..\Screenshots\Reports.png")
+        self.driver.get_screenshot_as_file("../Screenshots/Reports.png")
         reportID = self.driver.find_element(By.XPATH, "//table[@title='Reports Table']/tbody/tr/td[1]").text # WebDriver Exception
         reportName = self.driver.find_element(By.XPATH, "//table[@title='Reports Table']/tbody/tr/td[2]").text
         reportDescription = self.driver.find_element(By.XPATH, "//table[@title='Reports Table']/tbody/tr/td[3]").text
@@ -489,7 +489,7 @@ class Test_verifyHomePage(softest.TestCase):
         print(Fore.GREEN + "THE FIRST RECORD DISPLAYED ON 'REPORT' TABLE IS: - ", end='')
         print(Style.RESET_ALL)
         print("     Report ID: - " + reportID + "   Report Name: - " + reportName + "   Report Description: - " + reportDescription)
-        workbook.save("..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
+        workbook.save("../ExcelFiles/Automated_SmokeTest_Result.xlsx")
 ############################## Verifying Resources  Page ###################################################
         print(Fore.BLUE + "\n************************* Verifying Resources Page*************************")
         print(Style.RESET_ALL)
@@ -551,7 +551,7 @@ class Test_verifyHomePage(softest.TestCase):
                 sheet.cell(row=64, column=4).value ='Pass'
             else:
                 sheet.cell(row=64, column=4).value = 'Fail'
-            workbook.save("..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
+            workbook.save("../ExcelFiles/Automated_SmokeTest_Result.xlsx")
         except WebDriverException as e:
             print("Webdriver encounterd an exception: (str(e))")
 
@@ -599,7 +599,7 @@ class Test_verifyHomePage(softest.TestCase):
         print(line3)
         # line2 = self.driver.find_element(By.XPATH,
         #                                  " //span[@class='ng-star-inserted'][normalize-space()='| February 12, 2020'])[1]").text
-        workbook.save("..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
+        workbook.save("../ExcelFiles/Automated_SmokeTest_Result.xlsx")
         self.assert_all()
 
 
