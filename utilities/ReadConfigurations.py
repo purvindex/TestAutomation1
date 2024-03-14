@@ -1,3 +1,4 @@
+import os
 from configparser import ConfigParser
 
 def read_configuration(category,key):
