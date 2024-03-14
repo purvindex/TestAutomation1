@@ -53,7 +53,7 @@ class Test_verifyHomePage(softest.TestCase):
         print(Fore.RED+'  CROWD - SMOKE TESTING RESULTS FOR TEST ENV ON ', formatted_combined )
         print(Style.RESET_ALL)
         sheet.cell(row=1, column=3).value =  formatted_combined
-        workbook.save("..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
+        workbook.save("../ExcelFiles/Automated_SmokeTest_Result.xlsx")
         print(Fore.BLUE +'\n******************** Verifying Title(s) & Logo(s) of CROWD Application ********************')
         print(Style.RESET_ALL)
 
@@ -324,7 +324,7 @@ class Test_verifyHomePage(softest.TestCase):
             print("Timestamp and Uploaded file time does not match")
             sheet.cell(row=26, column=4).value = "Fail"
 
-        self.driver.get_screenshot_as_file("..\Screenshots\File Status Page.png")
+        self.driver.get_screenshot_as_file("../Screenshots/File Status Page.png")
 # ############################################# Verifying Dashboard ###################################################
         print(Fore.BLUE +"\n************************* Verifying Dashboard Page *************************")
         print(Style.RESET_ALL)
