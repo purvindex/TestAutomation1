@@ -56,7 +56,7 @@ pipeline {
           #mkdir -p reports/junit
           #mkdir -p reports/coverage
 
-          #pip install -r requirements.txt
+          pip install -r requirements.txt
           export PYTHONPATH=".:./src:./tests:./testCases"
           #. tests/test-env.sh
           pytest -o log_cli=true --log-cli-level=WARNING \
