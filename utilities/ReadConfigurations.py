@@ -1,18 +1,11 @@
 import os
 from configparser import ConfigParser
 
+
 def read_configuration(category,key):
     config = ConfigParser()
-    #config.read(r"C:\Users\PurviDholakia\PycharmProjects\CROWD_TestAutomationFramework\Configurations\config.ini")
     raise ValueError(f"Current path: {os.getcwd()}")
 
-    try:
-	    file = open("../Configurations/config.ini")
-	    print(f"Got the config file successfully: {file}")
-	    config.read(file);
-	    return config.get(category,key)
-	except:
-		raise ValueError("Failed to read configuration file")
 
 
 
