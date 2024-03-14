@@ -49,7 +49,7 @@ pipeline {
 
           # Install required libraries
           python -m ensurepip --upgrade
-          pip install pipreqs pip-tools
+          pip install pytest-cov pipreqs pip-tools
 
           pipreqs --savepath=requirements.in && pip-compile
           # run unit tests using pytest
