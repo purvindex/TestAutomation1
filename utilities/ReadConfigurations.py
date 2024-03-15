@@ -6,7 +6,7 @@ def read_configuration(category,key):
     config = ConfigParser()
 #    raise ValueError(f"Current path: {os.getcwd()}")
 
-    file = open("./Configuration/config.ini")
+    file = open("./Configurations/config.ini")
     print(f"Got the config file successfully: {file}")
     config.read(file)
     return config.get(category,key)
