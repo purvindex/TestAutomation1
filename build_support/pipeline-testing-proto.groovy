@@ -44,13 +44,22 @@ pipeline {
         container('python') {
           sh '''
 
-          # Install required software and modules
+          # Install additional OS libraries
           apt-get update -y && \
             apt-get install -y \
               libglib2.0-0 \
               libnss3 \
               libgconf-2-4 \
               libfontconfig1
+
+          # Install Chrome
+          # TODO This is less than ideal. Look into building custom images.
+          echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+          apt-get -qq -o=Dpkg::Use-Pty=0 update && apt-get -qq -o=Dpkg::Use-Pty=0 -y install gettext-base gnupg2 wget > /dev/null
+          echo 'deb http://dl.google.com/linux/chrome/deb/ stable main' > /etc/apt/sources.list.d/chrome.list
+          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+          set -x && apt-get -qq -o=Dpkg::Use-Pty=0 update && apt-get -qq -o=Dpkg::Use-Pty=0 -y install xvfb google-chrome-stable > /dev/null
+          ln -sf /usr/bin/xvfb-chrome /usr/bin/google-chrome
 
 #            apt-get install -y \
 #              libglib2.0-0=2.50.3-2 \
