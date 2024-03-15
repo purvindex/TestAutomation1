@@ -8,7 +8,8 @@ def read_configuration(category,key):
 
     file = open("./Configurations/config.ini")
     print(f"Got the config file successfully: {file}")
-    config.read(file)
+    #config.read(file)
+    config.read(r"./Configurations/config.ini")
     return config.get(category,key)
 
 
