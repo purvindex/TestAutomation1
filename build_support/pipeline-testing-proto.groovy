@@ -54,6 +54,7 @@ pipeline {
 
           # Install Chrome
           # TODO This is less than ideal. Look into building custom images.
+          printf '#!/bin/sh\nexit 0' > /usr/sbin/policy-rc.d
           echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
           apt-get -qq -o=Dpkg::Use-Pty=0 update && apt-get -qq -o=Dpkg::Use-Pty=0 -y install gettext-base gnupg2 wget > /dev/null
           echo 'deb http://dl.google.com/linux/chrome/deb/ stable main' > /etc/apt/sources.list.d/chrome.list
