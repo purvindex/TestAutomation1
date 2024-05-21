@@ -1,27 +1,51 @@
-from selenium.common import WebDriverException, TimeoutException, NoSuchElementException
 import os
 import time
-import openpyxl
 import pytest
 import softest
+
 from colorama import Fore, Back, Style
+from selenium.common import WebDriverException, TimeoutException, NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import  WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+
 import datetime
 
-#@pytest.mark.usefixtures("setup_and_teardown",scope="class")#This fixture is from conftest.py and its working fine, we are chaning it for to test jenkins
+# @pytest.mark.usefixtures("setup_and_teardown",scope="class")#This fixture is from conftest.py and its working fine, we are chaning it for to test jenkins
 @pytest.mark.usefixtures("setup_and_teardown",scope="class")
 class Test_verifyHomePage(softest.TestCase):
-   # log = custLogger().getLogs()
+
+    def __init__(self, driver=None):
+        super().__init__()
+        self.driver = driver
 
     def test_TitleAndLogo(self):
         wait = WebDriverWait(self.driver, 20)
+
         # self.driver.find_element(By.ID, "cms-login-userId").send_keys("PDPOC_VAL")
         # self.driver.find_element(By.ID, "cms-login-password").send_keys("Crowd_dev_112723")
         # self.driver.find_element(By.ID, "cms-login-userId").send_keys("POC_DEV")
         # self.driver.find_element(By.ID, "cms-login-password").send_keys("Contractor_112723")
         self.driver.find_element(By.ID, "cms-label-tc").click() # ElementclickIntercepted exception
+
+        # print("Entred Username and Password")
+        # wait = WebDriverWait(self.driver, 20)
+        # self.driver.find_element(By.ID, "cms-login-userId").send_keys("PDPOC_VAL")
+        # self.driver.find_element(By.ID, "cms-login-password").send_keys("Crowd_dev_112723")
+        # self.driver.find_element(By.ID, "cms-login-userId").send_keys("POC_DEV")
+        # self.driver.find_element(By.ID, "cms-login-password").send_keys("Contractor_112723")
+        # print("Entred Username and Password")
+
+        # ActionChains(self.driver).move_to_element(WebDriverWait(self.driver, 20).until(
+        #     EC.visibility_of_element_located(By.ID, "cms-label-tc"))).click().perform()
+
+        # add_Button = WebDriverWait(self.driver, 10).until(
+        #    EC.element_to_be_clickable(self.driver.find_element(By.ID, "cms-label-tc")))
+        # self.driver.execute_script("arguments[0].click();", add_Button)
+
+        #self.driver.find_element(By.ID, "cms-label-tc").click()
+
         self.driver.find_element(By.ID, "cms-login-submit").click()
         ####OKTA
         #self.wait.until(EC.element_to_be_clickable(By.ID,"cms-send-push-phone" )).click()
@@ -29,28 +53,37 @@ class Test_verifyHomePage(softest.TestCase):
 
 #Click on CROWD
         #self.driver.find_element(By.XPATH, "//div[@class='ng-star-inserted']").click()
+
         time.sleep(8)
 
-        self.driver.get_screenshot_as_file("..\Screenshots\Main_Page.png")
+        self.driver.get_screenshot_as_file("../Screenshots/Main_Page.png")
         click_on_CROWD = WebDriverWait(self.driver, 10).until(
                         EC.element_to_be_clickable(self.driver.find_element(By.XPATH, "//div[@class='ng-star-inserted']")))
 
         self.driver.execute_script("arguments[0].click();", click_on_CROWD)
         time.sleep(3)
+
+        #click_on_CROWD = self.driver.find_element(By.XPATH,"//div[@class='ng-star-inserted']")
+        #self.driver.execute_script("arguments[0].click();", click_on_CROWD)
+        #time.sleep(6)
+        #self.driver.get_screenshot_as_file("..\Screenshots\Main_Page.png")
+        #self.driver.find_element(By.XPATH, "//div[@id='cms-crowd-tile-selected']").click()
+
         element_App = self.driver.find_element(By.LINK_TEXT, "Application")
         element_App.click()
 # using now() to get current time
         #current_time = datetime.datetime.now()
-        workbook = openpyxl.load_workbook("..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
-        sheet = workbook['Sheet1']
+        #workbook = openpyxl.load_workbook(r"..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
+        #workbook = openpyxl.load_workbook(r"..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
+        #sheet = workbook['Sheet1']
         combined = datetime.datetime.now()
         formatted_combined = combined.strftime("%d/%m/%Y %I:%M:%p")
         print('\n')
         print(Back.LIGHTYELLOW_EX)
         print(Fore.RED+'  CROWD - SMOKE TESTING RESULTS FOR TEST ENV ON ', formatted_combined )
         print(Style.RESET_ALL)
-        sheet.cell(row=1, column=3).value =  formatted_combined
-        workbook.save("..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
+        # sheet.cell(row=1, column=3).value =  formatted_combined
+        # workbook.save("../ExcelFiles/Automated_SmokeTest_Result.xlsx")
         print(Fore.BLUE +'\n******************** Verifying Title(s) & Logo(s) of CROWD Application ********************')
         print(Style.RESET_ALL)
 
@@ -60,8 +93,8 @@ class Test_verifyHomePage(softest.TestCase):
         print(Style.RESET_ALL)
         actual_Logo = self.driver.find_element(By.XPATH, "//em[@id='cms-homepage-header-logo-unauth']")
         print(actual_Logo.is_displayed())
-        sheet.cell(row=6, column=3).value = actual_Logo.is_displayed()
-        sheet.cell(row=6, column=4).value = "Pass"
+        # sheet.cell(row=6, column=3).value = actual_Logo.is_displayed()
+        # sheet.cell(row=6, column=4).value = "Pass"
         #workbook.save("..\ExcelFiles\SmokeTest_Result.xlsx")
         print("     'CMS.Gov|My Enterprise Portal' Logo is displayed.")
 
@@ -69,26 +102,29 @@ class Test_verifyHomePage(softest.TestCase):
         expected_title_main = "CMS Enterprise Portal - My Portal"
         print(Fore.GREEN + 'Title Verified: -', end='')
         print(Style.RESET_ALL)
-        sheet.cell(row=8, column=3).value = self.driver.title
+        # sheet.cell(row=8, column=3).value = self.driver.title
         self.soft_assert(self.assertEqual,self.driver.title,expected_title_main)
         if self.driver.title == expected_title_main:
             print("     Expected Title: - " + expected_title_main)
             print("     Actual Title: - " + self.driver.title)
-            sheet.cell(row=8, column=4).value = "Pass"
+            # sheet.cell(row=8, column=4).value = "Pass"
             #workbook.save("..\ExcelFiles\SmokeTest_Result.xlsx")
         else:
             # self.log.info("Assertion Failed")
             print("Main Title not match")
+
             sheet.cell(row=8, column=4).value = "Fail"
         time.sleep(5)
+
         self.driver.switch_to.frame(self.driver.find_element(By.XPATH, "//object[@id='obj_crowd_wab_application']"))
 
     # Verify 'CROWD' Logo// Once found NoSuchElementException
+        time.sleep(15)
         image = self.driver.find_element(By.XPATH,"//div[@class ='cms-logo']")
         print(image.is_displayed())
-        sheet.cell(row=10, column=3).value = image.is_displayed()
-        sheet.cell(row=10, column=4).value = "Pass"
-        workbook.save("..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
+        # sheet.cell(row=10, column=3).value = image.is_displayed()
+        # sheet.cell(row=10, column=4).value = "Pass"
+        # workbook.save("../ExcelFiles/Automated_SmokeTest_Result.xlsx")
         print(Fore.GREEN + 'CROWD Logo: -' , end='')
         print(Style.RESET_ALL)
         print("     'CROWD' Logo is displayed.")
@@ -98,32 +134,34 @@ class Test_verifyHomePage(softest.TestCase):
         actual_title = self.driver.execute_script('return document.title')
         print(Fore.GREEN + ' Title Verified: -', end='')
         print(Style.RESET_ALL)
-        sheet.cell(row=12, column=3).value = actual_title
+        #sheet.cell(row=12, column=3).value = actual_title
         self.soft_assert(self.assertEqual, actual_title, expected_title)
 
         if actual_title == expected_title:
            print("     Expected Title: - " + expected_title)
            print("     Actual Title: - " + actual_title)
-           sheet.cell(row=12, column=4).value = "Pass"
+           # sheet.cell(row=12, column=4).value = "Pass"
         else:
             # self.log.info("Assertion Failed")
-            sheet.cell(row=12, column=4).value = "Fail"
+            # sheet.cell(row=12, column=4).value = "Fail"
             print("Title not match")
 # Verifying  Text Welcome to CROWD
         #self.log.info("Verifying 'Welcome to CROWD' text")
         #wait.until(EC.visibility_of_element_located((By.XPATH, "//div[@id='homeTitleRow']/h1")))
-        actual_Text= wait.until(EC.visibility_of_element_located((By.XPATH, "//div[@id='homeTitleRow']/h1"))).text
+        #actual_text=self.driver.find_element(By.XPATH, "//div[@id='homeTitleRow']/h1")
+
+        #actual_Text= wait.until(EC.visibility_of_element_located((By.XPATH, "//div[@id='homeTitleRow']/h1"))).text
         expected_Text ="Welcome to CROWD"
-        #actual_Text=self.driver.find_element(By.XPATH, "//div[@id='homeTitleRow']/h1").text
+        actual_Text=self.driver.find_element(By.XPATH, "//div[@id='homeTitleRow']/h1").text
         print(Fore.GREEN + 'Text Verified: -', end='')
         print(Style.RESET_ALL)
-        sheet.cell(row=14, column=3).value = actual_Text
+        # sheet.cell(row=14, column=3).value = actual_Text
         self.soft_assert(self.assertEqual, actual_Text, expected_Text)
         if actual_Text == expected_Text:
            # self.log.info("Assertion Passed")
             print("     Expected Text: - " + expected_Text)
             print("     Actual Text: - " + actual_Text)
-            sheet.cell(row=14, column=4).value = "Pass"
+            # sheet.cell(row=14, column=4).value = "Pass"
         else:
            #self.log.info("Assertion Faileded")
            print("Welcome To Crowd test does not match")
@@ -134,17 +172,17 @@ class Test_verifyHomePage(softest.TestCase):
         actual_Summary = self.driver.find_element(By.XPATH, "//p[@id='crowd_summary']").text
         print(Fore.GREEN + 'Verified CROWD Summary: -', end='')
         print(Style.RESET_ALL)
-        sheet.cell(row=16, column=3).value = actual_Summary
+        # sheet.cell(row=16, column=3).value = actual_Summary
         self.soft_assert(self.assertEqual, actual_Summary, expected_Summary)
         if actual_Summary == expected_Summary:
             print("     Expected Summary: - " + expected_Summary)
             print("     Actual Summary: - " + actual_Summary)
-            sheet.cell(row=16, column=4).value = "Pass"
+            # sheet.cell(row=16, column=4).value = "Pass"
         else:
              # self.log.info("Assertion Faileded")
             print("CROWD Summary does not match")
-            sheet.cell(row=16, column=4).value = "Fail"
-        self.driver.get_screenshot_as_file("..\Screenshots\CROWD Page.png")
+            # sheet.cell(row=16, column=4).value = "Fail"
+        self.driver.get_screenshot_as_file("../Screenshots/CROWD Page.png")
 ############################## Verifying File Submission (File Upload & File Status) ######################################
         print(Fore.BLUE + "\n******************** Verifying File Submission - File Upload/ File Status Page ********************")
         print(Style.RESET_ALL)
@@ -162,7 +200,7 @@ class Test_verifyHomePage(softest.TestCase):
         click_on_uploadLink = self.driver.find_element(By.XPATH,
                                                        "//span[normalize-space()='File Upload']")
         self.driver.execute_script("arguments[0].click();",click_on_uploadLink)
-        self.driver.get_screenshot_as_file("..\Screenshots\FileUpload.png")
+        self.driver.get_screenshot_as_file("../Screenshots/FileUpload.png")
         click_on_iconButton = self.driver.find_element(By.XPATH,
                                                        "//mat-icon[@type='button']")
         self.driver.execute_script("arguments[0].click();", click_on_iconButton)
@@ -181,16 +219,16 @@ class Test_verifyHomePage(softest.TestCase):
             print("Heading does not match")
         #fileSelectionInstruction1 = self.driver.find_element(By.XPATH, "//div[@id='submissionInfo']/div[2]").text # Need to change as path has changed on 12/28
         expected_FileInsturctions = "Please use the ‘Browse’ button to locate and select a text (*.txt) file for upload. The file size must be greater than 0 bytes, but not more than 500 KB, and the file name can only contain the following valid characters:"
-        sheet.cell(row=20, column=2).value = expected_FileInsturctions
+        # sheet.cell(row=20, column=2).value = expected_FileInsturctions
         actual_FileInstructions = self.driver.find_element(By.XPATH, "//app-info-modal[@class='ng-star-inserted']/div/div[1]").text
-        sheet.cell(row=20, column=3).value = actual_FileInstructions
+        # sheet.cell(row=20, column=3).value = actual_FileInstructions
         self.soft_assert(self.assertEqual, expected_FileInsturctions, actual_FileInstructions)
         if actual_FileInstructions == expected_FileInsturctions:
             print("    " + actual_FileInstructions)
-            sheet.cell(row=20, column=4).value = "Pass"
+            # sheet.cell(row=20, column=4).value = "Pass"
         else:
             print("File Instructions does not match")
-            sheet.cell(row=20, column=4).value = "Fail"
+            # sheet.cell(row=20, column=4).value = "Fail"
 
         list_items = self.driver.find_elements(By.XPATH, "//app-info-modal[@class='ng-star-inserted']/div/ul/li")
 
@@ -204,15 +242,20 @@ class Test_verifyHomePage(softest.TestCase):
         #self.driver.get_screenshot_as_file("..\Screenshots\File Upload Page.png")
 # Clicking on Browse button
         time.sleep(6)
+
         browse_Button = self.driver.find_element(By.XPATH,
                                                "//span[normalize-space()='Browse']")
         self.driver.execute_script("arguments[0].click();", browse_Button)
 # Loading a file
+
         time.sleep(5)
         try:
             file = self.driver.find_element(By.XPATH, "//input[@type='file']")
             os.path.abspath("r..\File_Tobe_Upload\9_INVALID_ROWS_FORM_S.txt")
             file.send_keys(os.path.abspath(r"..\File_Tobe_Upload\9_INVALID_ROWS_FORM_S.txt"))
+            # os.path.abspath("r../File_Tobe_Upload/CONTRACTOR_MAPPING_VALIDATION_BAD_BSI_FORM_S.txt")
+            # file.send_keys(os.path.abspath(r"..\File_Tobe_Upload\CONTRACTOR_MAPPING_VALIDATION_BAD_BSI_FORM_S.txt"))
+        # except Exception as e:
         except TimeoutException as e:
             print(e)
 
@@ -251,20 +294,21 @@ class Test_verifyHomePage(softest.TestCase):
         self.driver.execute_script("arguments[0].click();", click_on_Refresh)
 
         self.driver.execute_script("arguments[0].click();", click_on_Refresh)
+
         time.sleep(5)
         wait.until(EC.visibility_of_element_located((By.XPATH, "//table[@title='File Status']/tbody/tr/td")))
         filename_displayed_onStatus = self.driver.find_element(By.XPATH, "//table[@title='File Status']/tbody/tr/td").text
         print(Fore.GREEN + 'Verified Uploaded File: -', end='')
         print(Style.RESET_ALL)
-        sheet.cell(row=22, column=2).value = uploaded_Filename
-        sheet.cell(row=22, column=3).value = filename_displayed_onStatus
+        # sheet.cell(row=22, column=2).value = uploaded_Filename
+        # sheet.cell(row=22, column=3).value = filename_displayed_onStatus
         self.soft_assert(self.assertEqual, filename_displayed_onStatus, uploaded_Filename)
         if uploaded_Filename == filename_displayed_onStatus:
             print("     Uploaded Filename: - " + uploaded_Filename )
             print("     Uploaded Filename Displayed On Status: - " + filename_displayed_onStatus)
-            sheet.cell(row=22, column=4).value = "Pass"
+            # sheet.cell(row=22, column=4).value = "Pass"
         else:
-            sheet.cell(row=22, column=4).value = "Fail"
+            # sheet.cell(row=22, column=4).value = "Fail"
             print("False")
 #Verify Comment on status page
         # click_on_Refresh = self.driver.find_element(By.XPATH,
@@ -273,16 +317,16 @@ class Test_verifyHomePage(softest.TestCase):
         comment_DisplayedOnStatus = self.driver.find_element(By.XPATH, "//span[@class='viewComment']").text
         print(Fore.GREEN + 'Verified Comment: -', end='')
         print(Style.RESET_ALL)
-        sheet.cell(row=24, column=2).value = comment_Tobe_Entered
-        sheet.cell(row=24, column=3).value = comment_DisplayedOnStatus
+        # sheet.cell(row=24, column=2).value = comment_Tobe_Entered
+        # sheet.cell(row=24, column=3).value = comment_DisplayedOnStatus
         self.soft_assert(self.assertEqual, comment_Tobe_Entered, comment_DisplayedOnStatus)
         if comment_Tobe_Entered == comment_DisplayedOnStatus:
             print("     Entered Comment:- " + comment_Tobe_Entered )
             print("     Comment Displayed On Status: - " + comment_DisplayedOnStatus )
-            sheet.cell(row=24, column=4).value = "Pass"
+            # sheet.cell(row=24, column=4).value = "Pass"
         else:
             # self.log.info("Assertion Failed")
-            sheet.cell(row=24, column=4).value = "Fail"
+            # sheet.cell(row=24, column=4).value = "Fail"
             print("Comment does not match")
 #Verify Timestamp
         timeStamp_DisplayedOnStatus = self.driver.find_element(By.XPATH,
@@ -299,16 +343,16 @@ class Test_verifyHomePage(softest.TestCase):
         ######################################################################
         print(Fore.GREEN + 'Verified Uploaded File Timing: -', end='')
         print(Style.RESET_ALL)
-        sheet.cell(row=26, column=3).value = currentTime
-        sheet.cell(row=26, column=2).value = timeStamp_DisplayedOnStatus
+        # sheet.cell(row=26, column=3).value = currentTime
+        # sheet.cell(row=26, column=2).value = timeStamp_DisplayedOnStatus
         #self.soft_assert(self.assertEqual, timeStamp_DisplayedOnStatus, currentTime or self.assertEqual,timeStamp_DisplayedOnStatus, updated_Currentime)
         if timeStamp_DisplayedOnStatus == currentTime or updated_Currentime:
             print("     File Uploaded on: - " + timeStamp_DisplayedOnStatus)
             print("     Current Date & Time: - " + currentTime, updated_Currentime)
-            sheet.cell(row=26, column=4).value = "Pass"
+            # sheet.cell(row=26, column=4).value = "Pass"
         else:
             print("Timestamp and Uploaded file time does not match")
-            sheet.cell(row=26, column=4).value = "Fail"
+            # sheet.cell(row=26, column=4).value = "Fail"
 
 # Verify Comments
         click_on_viewComments = self.driver.find_element(By.XPATH,"//div[@class='comments']/a")
@@ -326,6 +370,7 @@ class Test_verifyHomePage(softest.TestCase):
             print("False")
 
         self.driver.get_screenshot_as_file("..\Screenshots\File Status Page.png")
+
 # ############################## Verifying Form Page #####################################
         print(Fore.BLUE + "\n************************* Verifying Form Page *************************")
         print(Style.RESET_ALL)
@@ -334,6 +379,7 @@ class Test_verifyHomePage(softest.TestCase):
         #forms_Link = self.driver.find_element(By.XPATH,"//span[normalize-space()='Forms']")
         forms_Link = self.driver.find_element(By.XPATH, "//span[@class='list-item-label'][normalize-space()='Forms']")
         self.driver.execute_script("arguments[0].click();", forms_Link)
+
         time.sleep(4)
         self.driver.get_screenshot_as_file("..\Screenshots\Forms.png")
 
@@ -344,22 +390,22 @@ class Test_verifyHomePage(softest.TestCase):
         print(Fore.GREEN + "THE FIRST RECORD DISPLAYED ON 'FORM' TABLE IS: - ", end='')
         print(Style.RESET_ALL)
         print("     Form: - " + form + "  Form Type: - " + formType + "  Form Name: - " + formName)
-        sheet.cell(row=41, column=3).value = form
-        sheet.cell(row=43, column=3).value = formType
-        sheet.cell(row=45, column=3).value = formName
-
-        if sheet.cell(row=41, column=3).value == sheet.cell(row=41, column=2).value:
-            sheet.cell(row=41, column=4).value ='Pass'
-        else:
-            sheet.cell(row=41, column=4).value = 'Fail'
-        if sheet.cell(row=43, column=3).value == sheet.cell(row=43, column=2).value:
-            sheet.cell(row=43, column=4).value = 'Pass'
-        else:
-            sheet.cell(row=43, column=4).value = 'Fail'
-        if sheet.cell(row=45, column=3).value == sheet.cell(row=45, column=2).value:
-            sheet.cell(row=45, column=4).value = 'Pass'
-        else:
-            sheet.cell(row=34, column=4).value = 'Fail'
+        # sheet.cell(row=41, column=3).value = form
+        # sheet.cell(row=43, column=3).value = formType
+        # sheet.cell(row=45, column=3).value = formName
+        #
+        # if sheet.cell(row=41, column=3).value == sheet.cell(row=41, column=2).value:
+        #     sheet.cell(row=41, column=4).value ='Pass'
+        # else:
+        #     sheet.cell(row=41, column=4).value = 'Fail'
+        # if sheet.cell(row=43, column=3).value == sheet.cell(row=43, column=2).value:
+        #     sheet.cell(row=43, column=4).value = 'Pass'
+        # else:
+        #     sheet.cell(row=43, column=4).value = 'Fail'
+        # if sheet.cell(row=45, column=3).value == sheet.cell(row=45, column=2).value:
+        #     sheet.cell(row=45, column=4).value = 'Pass'
+        # else:
+        #     sheet.cell(row=34, column=4).value = 'Fail'
         time.sleep(7)
         parent_window_id = self.driver.current_window_handle
         #click_on_firstLink_Forms = self.driver.find_element(By.XPATH,
@@ -373,13 +419,13 @@ class Test_verifyHomePage(softest.TestCase):
             time.sleep(9)
             expected_Title = "(FORM 7 - PART A) APPEALS ACTIVITY (CMS-2592). MicroStrategy"
             actual_Title = self.driver.title
-            sheet.cell(row=47, column=3).value = actual_Title
+            # sheet.cell(row=47, column=3).value = actual_Title
             if actual_Title==expected_Title:
                 print(Fore.GREEN + 'Verified MicroStrategy Page Title: - ', end='')
                 print(Style.RESET_ALL)
                 print("     Expected Title: - "+ expected_Title)
                 print("     Actual Title: - " + actual_Title)
-                sheet.cell(row=47, column=4).value = "Pass"
+                # sheet.cell(row=47, column=4).value = "Pass"
                 #print(self.driver.current_window_handle)
                 break
             else:
@@ -452,6 +498,7 @@ class Test_verifyHomePage(softest.TestCase):
         reports_Link = self.driver.find_element(By.XPATH,
                                                  "//span[normalize-space()='Reports']")
         self.driver.execute_script("arguments[0].click();", reports_Link)
+
         time.sleep(4)
         self.driver.get_screenshot_as_file("..\Screenshots\Reports.png")
         reportID = self.driver.find_element(By.XPATH, "//table[@title='Reports']/tbody/tr/td[1]").text # WebDriver Exception
@@ -479,7 +526,7 @@ class Test_verifyHomePage(softest.TestCase):
         print(Fore.GREEN + "THE FIRST RECORD DISPLAYED ON 'REPORT' TABLE IS: - ", end='')
         print(Style.RESET_ALL)
         print("     Report ID: - " + reportID + "   Report Name: - " + reportName + "   Report Description: - " + reportDescription)
-        workbook.save("..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
+        # workbook.save("../ExcelFiles/Automated_SmokeTest_Result.xlsx")
 ############################## Verifying Resources  Page ###################################################
         print(Fore.BLUE + "\n************************* Verifying Resources Page*************************")
         print(Style.RESET_ALL)
@@ -505,11 +552,11 @@ class Test_verifyHomePage(softest.TestCase):
                                                  "//div[@class='container']/mat-card/ul/li[1]/a").text
             #print(system_Setup_Text)
 
-            sheet.cell(row=60, column=3).value = system_Setup_Text
-            if sheet.cell(row=60, column=3).value == sheet.cell(row=60, column=2).value:
-                sheet.cell(row=60, column=4).value ='Pass'
-            else:
-                sheet.cell(row=60, column=4).value = 'Fail'
+            # sheet.cell(row=60, column=3).value = system_Setup_Text
+            # if sheet.cell(row=60, column=3).value == sheet.cell(row=60, column=2).value:
+            #     sheet.cell(row=60, column=4).value ='Pass'
+            # else:
+            #     sheet.cell(row=60, column=4).value = 'Fail'
         ##############  Reporting ############
             reporting_Link = self.driver.find_element(By.XPATH,
                                                   "//span[normalize-space()='Reporting']")
@@ -521,11 +568,11 @@ class Test_verifyHomePage(softest.TestCase):
             crowd_Reporting_Requirement_Text = self.driver.find_element(By.XPATH,
                                                    "//div[@class='container']/mat-card/ul/li[1]/a").text
             print(crowd_Reporting_Requirement_Text)
-            sheet.cell(row=62, column=3).value = crowd_Reporting_Requirement_Text
-            if sheet.cell(row=62, column=3).value == sheet.cell(row=62, column=2).value:
-                sheet.cell(row=62, column=4).value ='Pass'
-            else:
-                sheet.cell(row=62, column=4).value = 'Fail'
+            # sheet.cell(row=62, column=3).value = crowd_Reporting_Requirement_Text
+            # if sheet.cell(row=62, column=3).value == sheet.cell(row=62, column=2).value:
+            #     sheet.cell(row=62, column=4).value ='Pass'
+            # else:
+            #     sheet.cell(row=62, column=4).value = 'Fail'
         ############ Training Material ########################
             trainingMaterial_Link = self.driver.find_element(By.XPATH,
                                                   "//span[normalize-space()='Training Material']")
@@ -538,12 +585,12 @@ class Test_verifyHomePage(softest.TestCase):
                                                    "//div[@class='container']/mat-card/ul/li[2]/ul/li[2]/a").text
 
             print(requestCrowdAccess_Text)
-            sheet.cell(row=64, column=3).value = requestCrowdAccess_Text
-            if sheet.cell(row=64, column=3).value == sheet.cell(row=64, column=2).value:
-                sheet.cell(row=64, column=4).value ='Pass'
-            else:
-                sheet.cell(row=64, column=4).value = 'Fail'
-            workbook.save("..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
+            # sheet.cell(row=64, column=3).value = requestCrowdAccess_Text
+            # if sheet.cell(row=64, column=3).value == sheet.cell(row=64, column=2).value:
+            #     sheet.cell(row=64, column=4).value ='Pass'
+            # else:
+            #     sheet.cell(row=64, column=4).value = 'Fail'
+            # workbook.save("../ExcelFiles/Automated_SmokeTest_Result.xlsx")
         except WebDriverException as e:
             print("Webdriver encounterd an exception: (str(e))")
 # ############################## Verifying News Page #####################################
@@ -573,6 +620,7 @@ class Test_verifyHomePage(softest.TestCase):
         #print(line1)
         time.sleep(3)
         line2 = self.driver.find_element(By.XPATH,
+
                                          "//span[@class='ng-star-inserted']").text
         print(line1 + ' ' + line2)
         sheet.cell(row=69, column=3).value = line1 + ' ' +line2
@@ -583,10 +631,11 @@ class Test_verifyHomePage(softest.TestCase):
         #line3 =self.driver.find_element(By.XPATH, "//span[normalize-space()='| December 23rd, 2021']").text
         line3 = self.driver.find_element(By.XPATH, "//p[@class='article']").text
         sheet.cell(row=70, column=3).value = line3
+
         print(line3)
         # line2 = self.driver.find_element(By.XPATH,
         #                                  " //span[@class='ng-star-inserted'][normalize-space()='| February 12, 2020'])[1]").text
-        workbook.save("..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
+        # workbook.save("../ExcelFiles/Automated_SmokeTest_Result.xlsx")
         self.assert_all()
 
 

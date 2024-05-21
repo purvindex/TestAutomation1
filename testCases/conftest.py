@@ -112,11 +112,3 @@ def pytest_runtest_makereport(item):
     if result.failed:
         allure.attach(item.cls.driver.get_screenshot_as_png(), "Failed Screenshot", attachment_type=AttachmentType.PNG)
 
-
-
-
-
-
-
-
-
