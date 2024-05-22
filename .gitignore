@@ -1,6 +1,24 @@
+# IDE and build working files
+.project
+.idea
+.vscode
+.pydevproject
 *.pyc
-*.idea
+*/__pycache__/*
+*/__pytest_cache__/*
+src/.coverage
+build/*
+
+# Python working files
+venv
+
+# Report tool files
+Allure_Reports
+
+# Log lifes
 *.log
+
+# Test cases in experimental state
 testCases/test_CrossBrowserTesting.py
 testCases/color_testing.py
 testCases/FileUpload_Datadriven.py
