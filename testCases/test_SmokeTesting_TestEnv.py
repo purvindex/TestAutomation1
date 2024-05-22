@@ -2,6 +2,7 @@ import os
 import time
 import pytest
 import softest
+import openpyxl
 
 from colorama import Fore, Back, Style
 from selenium.common import WebDriverException, TimeoutException, NoSuchElementException
@@ -73,9 +74,9 @@ class Test_verifyHomePage(softest.TestCase):
         element_App.click()
 # using now() to get current time
         #current_time = datetime.datetime.now()
-        #workbook = openpyxl.load_workbook(r"..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
-        #workbook = openpyxl.load_workbook(r"..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
-        #sheet = workbook['Sheet1']
+        workbook = openpyxl.load_workbook(r"..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
+        workbook = openpyxl.load_workbook(r"..\ExcelFiles\Automated_SmokeTest_Result.xlsx")
+        sheet = workbook['Sheet1']
         combined = datetime.datetime.now()
         formatted_combined = combined.strftime("%d/%m/%Y %I:%M:%p")
         print('\n')
@@ -122,9 +123,9 @@ class Test_verifyHomePage(softest.TestCase):
         time.sleep(15)
         image = self.driver.find_element(By.XPATH,"//div[@class ='cms-logo']")
         print(image.is_displayed())
-        # sheet.cell(row=10, column=3).value = image.is_displayed()
-        # sheet.cell(row=10, column=4).value = "Pass"
-        # workbook.save("../ExcelFiles/Automated_SmokeTest_Result.xlsx")
+        sheet.cell(row=10, column=3).value = image.is_displayed()
+        sheet.cell(row=10, column=4).value = "Pass"
+        workbook.save("../ExcelFiles/Automated_SmokeTest_Result.xlsx")
         print(Fore.GREEN + 'CROWD Logo: -' , end='')
         print(Style.RESET_ALL)
         print("     'CROWD' Logo is displayed.")
@@ -140,10 +141,10 @@ class Test_verifyHomePage(softest.TestCase):
         if actual_title == expected_title:
            print("     Expected Title: - " + expected_title)
            print("     Actual Title: - " + actual_title)
-           # sheet.cell(row=12, column=4).value = "Pass"
+           sheet.cell(row=12, column=4).value = "Pass"
         else:
             # self.log.info("Assertion Failed")
-            # sheet.cell(row=12, column=4).value = "Fail"
+            sheet.cell(row=12, column=4).value = "Fail"
             print("Title not match")
 # Verifying  Text Welcome to CROWD
         #self.log.info("Verifying 'Welcome to CROWD' text")
@@ -155,13 +156,13 @@ class Test_verifyHomePage(softest.TestCase):
         actual_Text=self.driver.find_element(By.XPATH, "//div[@id='homeTitleRow']/h1").text
         print(Fore.GREEN + 'Text Verified: -', end='')
         print(Style.RESET_ALL)
-        # sheet.cell(row=14, column=3).value = actual_Text
+        sheet.cell(row=14, column=3).value = actual_Text
         self.soft_assert(self.assertEqual, actual_Text, expected_Text)
         if actual_Text == expected_Text:
            # self.log.info("Assertion Passed")
             print("     Expected Text: - " + expected_Text)
             print("     Actual Text: - " + actual_Text)
-            # sheet.cell(row=14, column=4).value = "Pass"
+            sheet.cell(row=14, column=4).value = "Pass"
         else:
            #self.log.info("Assertion Faileded")
            print("Welcome To Crowd test does not match")
@@ -172,16 +173,16 @@ class Test_verifyHomePage(softest.TestCase):
         actual_Summary = self.driver.find_element(By.XPATH, "//p[@id='crowd_summary']").text
         print(Fore.GREEN + 'Verified CROWD Summary: -', end='')
         print(Style.RESET_ALL)
-        # sheet.cell(row=16, column=3).value = actual_Summary
+        sheet.cell(row=16, column=3).value = actual_Summary
         self.soft_assert(self.assertEqual, actual_Summary, expected_Summary)
         if actual_Summary == expected_Summary:
             print("     Expected Summary: - " + expected_Summary)
             print("     Actual Summary: - " + actual_Summary)
-            # sheet.cell(row=16, column=4).value = "Pass"
+            sheet.cell(row=16, column=4).value = "Pass"
         else:
-             # self.log.info("Assertion Faileded")
+            self.log.info("Assertion Faileded")
             print("CROWD Summary does not match")
-            # sheet.cell(row=16, column=4).value = "Fail"
+            sheet.cell(row=16, column=4).value = "Fail"
         self.driver.get_screenshot_as_file("../Screenshots/CROWD Page.png")
 ############################## Verifying File Submission (File Upload & File Status) ######################################
         print(Fore.BLUE + "\n******************** Verifying File Submission - File Upload/ File Status Page ********************")
@@ -228,7 +229,7 @@ class Test_verifyHomePage(softest.TestCase):
             # sheet.cell(row=20, column=4).value = "Pass"
         else:
             print("File Instructions does not match")
-            # sheet.cell(row=20, column=4).value = "Fail"
+            sheet.cell(row=20, column=4).value = "Fail"
 
         list_items = self.driver.find_elements(By.XPATH, "//app-info-modal[@class='ng-star-inserted']/div/ul/li")
 
@@ -300,15 +301,15 @@ class Test_verifyHomePage(softest.TestCase):
         filename_displayed_onStatus = self.driver.find_element(By.XPATH, "//table[@title='File Status']/tbody/tr/td").text
         print(Fore.GREEN + 'Verified Uploaded File: -', end='')
         print(Style.RESET_ALL)
-        # sheet.cell(row=22, column=2).value = uploaded_Filename
-        # sheet.cell(row=22, column=3).value = filename_displayed_onStatus
+        sheet.cell(row=22, column=2).value = uploaded_Filename
+        sheet.cell(row=22, column=3).value = filename_displayed_onStatus
         self.soft_assert(self.assertEqual, filename_displayed_onStatus, uploaded_Filename)
         if uploaded_Filename == filename_displayed_onStatus:
             print("     Uploaded Filename: - " + uploaded_Filename )
             print("     Uploaded Filename Displayed On Status: - " + filename_displayed_onStatus)
-            # sheet.cell(row=22, column=4).value = "Pass"
+            sheet.cell(row=22, column=4).value = "Pass"
         else:
-            # sheet.cell(row=22, column=4).value = "Fail"
+            sheet.cell(row=22, column=4).value = "Fail"
             print("False")
 #Verify Comment on status page
         # click_on_Refresh = self.driver.find_element(By.XPATH,
@@ -323,10 +324,10 @@ class Test_verifyHomePage(softest.TestCase):
         if comment_Tobe_Entered == comment_DisplayedOnStatus:
             print("     Entered Comment:- " + comment_Tobe_Entered )
             print("     Comment Displayed On Status: - " + comment_DisplayedOnStatus )
-            # sheet.cell(row=24, column=4).value = "Pass"
+            sheet.cell(row=24, column=4).value = "Pass"
         else:
-            # self.log.info("Assertion Failed")
-            # sheet.cell(row=24, column=4).value = "Fail"
+            self.log.info("Assertion Failed")
+            sheet.cell(row=24, column=4).value = "Fail"
             print("Comment does not match")
 #Verify Timestamp
         timeStamp_DisplayedOnStatus = self.driver.find_element(By.XPATH,
@@ -343,8 +344,8 @@ class Test_verifyHomePage(softest.TestCase):
         ######################################################################
         print(Fore.GREEN + 'Verified Uploaded File Timing: -', end='')
         print(Style.RESET_ALL)
-        # sheet.cell(row=26, column=3).value = currentTime
-        # sheet.cell(row=26, column=2).value = timeStamp_DisplayedOnStatus
+        sheet.cell(row=26, column=3).value = currentTime
+        sheet.cell(row=26, column=2).value = timeStamp_DisplayedOnStatus
         #self.soft_assert(self.assertEqual, timeStamp_DisplayedOnStatus, currentTime or self.assertEqual,timeStamp_DisplayedOnStatus, updated_Currentime)
         if timeStamp_DisplayedOnStatus == currentTime or updated_Currentime:
             print("     File Uploaded on: - " + timeStamp_DisplayedOnStatus)
@@ -390,22 +391,22 @@ class Test_verifyHomePage(softest.TestCase):
         print(Fore.GREEN + "THE FIRST RECORD DISPLAYED ON 'FORM' TABLE IS: - ", end='')
         print(Style.RESET_ALL)
         print("     Form: - " + form + "  Form Type: - " + formType + "  Form Name: - " + formName)
-        # sheet.cell(row=41, column=3).value = form
-        # sheet.cell(row=43, column=3).value = formType
-        # sheet.cell(row=45, column=3).value = formName
+        sheet.cell(row=41, column=3).value = form
+        sheet.cell(row=43, column=3).value = formType
+        sheet.cell(row=45, column=3).value = formName
         #
-        # if sheet.cell(row=41, column=3).value == sheet.cell(row=41, column=2).value:
-        #     sheet.cell(row=41, column=4).value ='Pass'
-        # else:
-        #     sheet.cell(row=41, column=4).value = 'Fail'
-        # if sheet.cell(row=43, column=3).value == sheet.cell(row=43, column=2).value:
-        #     sheet.cell(row=43, column=4).value = 'Pass'
-        # else:
-        #     sheet.cell(row=43, column=4).value = 'Fail'
-        # if sheet.cell(row=45, column=3).value == sheet.cell(row=45, column=2).value:
-        #     sheet.cell(row=45, column=4).value = 'Pass'
-        # else:
-        #     sheet.cell(row=34, column=4).value = 'Fail'
+        if sheet.cell(row=41, column=3).value == sheet.cell(row=41, column=2).value:
+            sheet.cell(row=41, column=4).value ='Pass'
+        else:
+            sheet.cell(row=41, column=4).value = 'Fail'
+        if sheet.cell(row=43, column=3).value == sheet.cell(row=43, column=2).value:
+            sheet.cell(row=43, column=4).value = 'Pass'
+        else:
+            sheet.cell(row=43, column=4).value = 'Fail'
+        if sheet.cell(row=45, column=3).value == sheet.cell(row=45, column=2).value:
+            sheet.cell(row=45, column=4).value = 'Pass'
+        else:
+            sheet.cell(row=34, column=4).value = 'Fail'
         time.sleep(7)
         parent_window_id = self.driver.current_window_handle
         #click_on_firstLink_Forms = self.driver.find_element(By.XPATH,
@@ -419,13 +420,13 @@ class Test_verifyHomePage(softest.TestCase):
             time.sleep(9)
             expected_Title = "(FORM 7 - PART A) APPEALS ACTIVITY (CMS-2592). MicroStrategy"
             actual_Title = self.driver.title
-            # sheet.cell(row=47, column=3).value = actual_Title
+            sheet.cell(row=47, column=3).value = actual_Title
             if actual_Title==expected_Title:
                 print(Fore.GREEN + 'Verified MicroStrategy Page Title: - ', end='')
                 print(Style.RESET_ALL)
                 print("     Expected Title: - "+ expected_Title)
                 print("     Actual Title: - " + actual_Title)
-                # sheet.cell(row=47, column=4).value = "Pass"
+                sheet.cell(row=47, column=4).value = "Pass"
                 #print(self.driver.current_window_handle)
                 break
             else:
@@ -552,11 +553,11 @@ class Test_verifyHomePage(softest.TestCase):
                                                  "//div[@class='container']/mat-card/ul/li[1]/a").text
             #print(system_Setup_Text)
 
-            # sheet.cell(row=60, column=3).value = system_Setup_Text
-            # if sheet.cell(row=60, column=3).value == sheet.cell(row=60, column=2).value:
-            #     sheet.cell(row=60, column=4).value ='Pass'
-            # else:
-            #     sheet.cell(row=60, column=4).value = 'Fail'
+            sheet.cell(row=60, column=3).value = system_Setup_Text
+            if sheet.cell(row=60, column=3).value == sheet.cell(row=60, column=2).value:
+                sheet.cell(row=60, column=4).value ='Pass'
+            else:
+                sheet.cell(row=60, column=4).value = 'Fail'
         ##############  Reporting ############
             reporting_Link = self.driver.find_element(By.XPATH,
                                                   "//span[normalize-space()='Reporting']")
@@ -568,11 +569,11 @@ class Test_verifyHomePage(softest.TestCase):
             crowd_Reporting_Requirement_Text = self.driver.find_element(By.XPATH,
                                                    "//div[@class='container']/mat-card/ul/li[1]/a").text
             print(crowd_Reporting_Requirement_Text)
-            # sheet.cell(row=62, column=3).value = crowd_Reporting_Requirement_Text
-            # if sheet.cell(row=62, column=3).value == sheet.cell(row=62, column=2).value:
-            #     sheet.cell(row=62, column=4).value ='Pass'
-            # else:
-            #     sheet.cell(row=62, column=4).value = 'Fail'
+            sheet.cell(row=62, column=3).value = crowd_Reporting_Requirement_Text
+            if sheet.cell(row=62, column=3).value == sheet.cell(row=62, column=2).value:
+                sheet.cell(row=62, column=4).value ='Pass'
+            else:
+                sheet.cell(row=62, column=4).value = 'Fail'
         ############ Training Material ########################
             trainingMaterial_Link = self.driver.find_element(By.XPATH,
                                                   "//span[normalize-space()='Training Material']")
@@ -585,12 +586,12 @@ class Test_verifyHomePage(softest.TestCase):
                                                    "//div[@class='container']/mat-card/ul/li[2]/ul/li[2]/a").text
 
             print(requestCrowdAccess_Text)
-            # sheet.cell(row=64, column=3).value = requestCrowdAccess_Text
-            # if sheet.cell(row=64, column=3).value == sheet.cell(row=64, column=2).value:
-            #     sheet.cell(row=64, column=4).value ='Pass'
-            # else:
-            #     sheet.cell(row=64, column=4).value = 'Fail'
-            # workbook.save("../ExcelFiles/Automated_SmokeTest_Result.xlsx")
+            sheet.cell(row=64, column=3).value = requestCrowdAccess_Text
+            if sheet.cell(row=64, column=3).value == sheet.cell(row=64, column=2).value:
+                sheet.cell(row=64, column=4).value ='Pass'
+            else:
+                sheet.cell(row=64, column=4).value = 'Fail'
+            workbook.save("../ExcelFiles/Automated_SmokeTest_Result.xlsx")
         except WebDriverException as e:
             print("Webdriver encounterd an exception: (str(e))")
 # ############################## Verifying News Page #####################################

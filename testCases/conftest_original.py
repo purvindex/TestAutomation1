@@ -28,10 +28,10 @@ def setup_and_teardown(request):
     driver.implicitly_wait(20)
     app_url = ReadConfigurations.read_configuration("basic info", "url")
     driver.get(app_url)
-    # uname=ReadConfigurations.read_configuration("basic info", "username")
-    # driver.find_element(By.ID, "cms-login-userId").send_keys(uname)
-    # pswd=ReadConfigurations.read_configuration("basic info", "password")
-    # driver.find_element(By.ID, "cms-login-password").send_keys(pswd)
+    uname=ReadConfigurations.read_configuration("basic info", "username")
+    driver.find_element(By.ID, "cms-login-userId").send_keys(uname)
+    pswd=ReadConfigurations.read_configuration("basic info", "password")
+    driver.find_element(By.ID, "cms-login-password").send_keys(pswd)
     request.cls.driver = driver # whichever class will request this driver is available to that class
     yield
     driver.quit()

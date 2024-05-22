@@ -51,19 +51,19 @@ def setup_and_teardown(request):
         print(f"Remote driver session id: %s", driver.session_id)
         #driver.quit()
 
-        # app_url = ReadConfigurations.read_configuration("basic info", "url")
-        # driver.get(app_url)
-        #
-        # uname = ReadConfigurations.read_configuration("basic info", "username")
-        # driver.find_element(By.ID, "cms-login-userId").send_keys(uname)
-        #
-        # pswd = ReadConfigurations.read_configuration("basic info", "password")
-        # driver.find_element(By.ID, "cms-login-password").send_keys(pswd)
-        #
-        # request.cls.driver = driver  # whichever class will request this driver is available to that class
-        # # request.cls.wait =wait
-        # yield
-        # driver.quit()
+        app_url = ReadConfigurations.read_configuration("basic info", "url")
+        driver.get(app_url)
+
+        uname = ReadConfigurations.read_configuration("basic info", "username")
+        driver.find_element(By.ID, "cms-login-userId").send_keys(uname)
+
+        pswd = ReadConfigurations.read_configuration("basic info", "password")
+        driver.find_element(By.ID, "cms-login-password").send_keys(pswd)
+
+        request.cls.driver = driver  # whichever class will request this driver is available to that class
+        # request.cls.wait =wait
+        yield
+        driver.quit()
 
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="chrome")
