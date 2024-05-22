@@ -6,6 +6,7 @@
 *.pyc
 */__pycache__/*
 */__pytest_cache__/*
+*/.pytest_cache/*
 src/.coverage
 build/*
 
@@ -14,9 +15,11 @@ venv
 
 # Report tool files
 Allure_Reports
+*/allure-report/*
 
 # Log lifes
 *.log
+Logs
 
 # Test cases in experimental state
 testCases/test_CrossBrowserTesting.py
